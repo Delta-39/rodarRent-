@@ -40,20 +40,24 @@ export default function Detail({ saveState }) {
 
   return (
     <div className="bg-white w-full h-[calc(100vh-112px)] flex flex-col">
-      {!vehicle.model ?
+      {!vehicle.model ? (
         <div className='h-full w-full flex justify-center items-center' >
           <Loader />
-        </div> : (
-          <div className='h-full px-28 py-8 font-poppins transition duration-300 dark:bg-slate-900 dark:text-gray-100' >
+        </div>
+        ) : (
+          <div className='h-full flex flex-col justify-start px-28 py-8 font-poppins transition duration-300 dark:bg-slate-900 dark:text-gray-100' >
+            <div className='w-full flex mb-6'>
             <Link className='border flex w-36 justify-evenly items-center border-gray-300 bg-white text-xl drop-shadow-md py-1 rounded-lg font-normal transition duration-300 hover:drop-shadow-none dark:bg-slate-950' to={routesHelper.cars} onClick={() => saveState()}>
               <BiArrowBack />
               Back
-            </Link><br />
-            <div className='w-full h-5/6 flex items-center justify-between' >
-              <div className=' w-1/2 self-end' >
-                <img className='w-full' src={vehicle.image} alt={`${vehicle.brand} ${vehicle.model}`} />
+            </Link>
+            <br />
+            </div>
+            <div className='w-full h-full md:h-[90dvh] flex flex-col-reverse md:flex-row items-center justify-end md:justify-between' >
+              <div className='w-full my-10 md:my-1 md:w-1/2 mx-auto self-end flex justify-center' >
+                <img className='w-full min-w-[250px] mx-auto' src={vehicle.image} alt={`${vehicle.brand} ${vehicle.model}`} />
               </div>
-              <div className=' xl:w-96 2xl:w-100 rounded-3xl p-6 bg-white drop-shadow-md border transition duration-300 border-gray-300 dark:bg-slate-950'>
+              <div className=' xl:w-96 2xl:w-100 min-w-[250px] h-full rounded-3xl p-6 bg-white drop-shadow-md border transition duration-300 border-gray-300 dark:bg-slate-950'>
                 <div>
                   <h2 className='text-2xl font-extralight'>{vehicle.brand}</h2>
                   <h1 className='text-5xl mt-3 font-semibold'>{vehicle.model}</h1>
@@ -64,15 +68,15 @@ export default function Detail({ saveState }) {
                   <h1 className=' text-5xl mt-3 font-semibold' >${vehicle.price}.00</h1>
                 </div>
                 <hr className='mt-3 border-gray-300' />
-                <div>
+                <div className='min-h-[50%]'>
                   <h2 className='text-xl mt-3 w-full font-extralight' >Specifications:</h2>
-                  <div className='mt-3 grid grid-cols-2 w-full border border-gray-200 bg-white drop-shadow-md p-2 rounded-xl dark:bg-slate-900'>
-                    <div className='text-md' >
+                  <div className='mt-3 grid grid-cols-2 w-full min-w-[250px] h-[80%] border border-gray-200 bg-white drop-shadow-md p-2 rounded-xl dark:bg-slate-900'>
+                    <div className='text-md md:h-180px' >
                       <p className='font-light' >Brand: <span className='font-semibold' >{vehicle.brand}</span></p>
                       <p className='font-light' >Model: <span className='font-semibold' >{vehicle.model}</span></p>
                       <p className='font-light' >Transmission:  <span className='font-semibold' >{vehicle.transmission}</span></p>
                     </div>
-                    <div className='ml-10' >
+                    <div className='ml-10 md:h-180px' >
                       <p className='font-light' >Fuel: <span className='font-semibold' >{vehicle.fuel}</span></p>
                       <p className='font-light' >Capacity: <span className='font-semibold' >{vehicle.passengers}</span></p>
                     </div>
