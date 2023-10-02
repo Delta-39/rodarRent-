@@ -2,6 +2,7 @@ import { setLocalStorage, removeLocalStorage } from './storage';
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import revalidateCustomerData from './revalidateCustomerData';
+import { API_BASE_URL } from './routes';
 
 export const successLogin = async (customerData, navigate) => {
   
@@ -29,7 +30,8 @@ export const logOutSession = async (navigate) =>{
   setLocalStorage('isLoggedIn', false)
   removeLocalStorage('loginData')
   toast.success('Logged Out Succesfuly',{position:'top-left'})
-  setTimeout(()=>{
-    navigate('/cars')
-  },'2000')
+  window.location.href = API_BASE_URL + '/logout';
+  // setTimeout(()=>{
+  //   navigate('/cars')
+  // },'2000')
 }
