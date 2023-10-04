@@ -41,7 +41,7 @@ export default function Detail({ saveState }) {
   return (
     <div className="bg-white w-full h-[calc(100vh-112px)] flex flex-col">
       {!vehicle.model ? (
-        <div className='h-full w-full flex justify-center items-center' >
+        <div className='h-full w-full flex justify-center items-center'>
           <Loader />
         </div>
         ) : (

@@ -262,7 +262,7 @@ const CustomerDetail = () => {
 
   return (
     <div className="min-h-[calc(100vh-112px)] font-poppins transition duration-300 dark:bg-slate-900 dark:text-gray-100">
-      <div className="w-full h-16 rounded-t-lg p-6 flex flex-col justify-evenly ">
+      <div className="w-full sm:h-16 rounded-t-lg p-6 flex flex-col justify-evenly ">
         <WelcomeCustomer customer={customer} onLogout={handleLogout} />
       </div>
       <div className="grid grid-cols-3 grid-row-3 h-full">
