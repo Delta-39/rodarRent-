@@ -4,11 +4,12 @@ import Loader from "../../components/Loader/Loader";
 import PaginationAdminCustomer from "../../components/AdminComponents/AdminClients/PaginationAdminCustomer";
 import axios from "axios";
 import { BiTrash, BiSearchAlt, BiX } from 'react-icons/bi';
+import { MdOutlineAdminPanelSettings, MdAdminPanelSettings } from 'react-icons/md';
 import { API_BASE_URL } from "../../helpers/routes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DeleteConfirmationModal from "../../components/AdminComponents/AdminClients/DeleteConfirmationModal";
-
+import AdminConfirmationModal from "../../components/AdminComponents/AdminClients/AdminConfirmationModal";
 
 function AdminClients() {
   const [customers, setCustomers] = useState([]);
@@ -23,6 +24,8 @@ function AdminClients() {
   const [pageSize] = useState(15);
   const [error, setError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [notificationShown, setNotificationShown] = useState(false);
   const [sortOrder, setSortOrder] = useState("ASC");
   const [filterCriteria, setFilterCriteria] = useState({
     name: "",
@@ -59,6 +62,7 @@ function AdminClients() {
           customer.address,
           customer.email,
           customer.isActive ? "Yes" : "No",
+          //customer.UserId,
         ];
 
         return searchableFields.some((field) =>
@@ -71,7 +75,7 @@ function AdminClients() {
       setLoading(false);
       setError(null);
     } catch (error) {
-      setError("Error loading customers.");
+      setError();
       setLoading(false);
     }
   };
@@ -107,7 +111,6 @@ function AdminClients() {
       setCurrentPage(currentPage);
     }
   };
-
   const handleDeactivateSelectedCustomer = async (customerIds) => {
     try {
       const deactivateRequests = customerIds.map(async (customerId) => {
@@ -145,19 +148,95 @@ function AdminClients() {
           fetchData();
         }, 3000);
       } else {
-        setError("Error deactivating some customers.");
+        setError("");
       }
     } catch (error) {
-      setError("Error deactivating some customers.");
+      setError("");
     }
   };
 
+  const handleAdminSelectedCustomer = async (customerIds) => {
+    try {
+      const adminRequests = customerIds.map(async (customerId) => {
+        try {
+          const getResponse = await fetch(`${API_BASE_URL}/customers/${customerId}`);
+
+          if (!getResponse.ok) {
+            return { success: false };
+          }
+
+          const customerData = await getResponse.json();
+
+          if (customerData.UserId === 1) {
+            toast.error('User is already an admin', {
+              position: 'top-left',
+              autoClose: 3000,
+            });
+            return { success: false };
+          }
+
+          customerData.UserId = 1;
+
+          const putResponse = await fetch(`${API_BASE_URL}/customers/`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(customerData),
+          });
+
+          if (!putResponse.ok) {
+            console.error(`PUT request failed with status ${putResponse.status}`);
+            const errorResponse = await putResponse.json();
+            console.error('Error Response:', errorResponse);
+            return { success: false };
+          }
+
+
+          return { success: putResponse.status === 200 };
+        } catch (error) {
+          console.error(error);
+          return { success: false };
+        }
+      });
+
+      const results = await Promise.all(adminRequests);
+
+      const hasError = results.some((result) => !result.success);
+
+      if (!hasError) {
+        toast.success('Successfully updated customers', {
+          position: 'top-left',
+          autoClose: 3000,
+        });
+        setCustomers((prevCustomers) =>
+          prevCustomers.map((customer) => {
+            if (customerIds.includes(customer.id)) {
+              return {
+                ...customer,
+                UserId: 1,
+              };
+            }
+            return customer;
+          })
+        );
+        setSelectedCustomers([]);
+      } else {
+        setError();
+      }
+    } catch (error) {
+      console.error(error);
+      setError();
+    }
+  };
+
+
   if (loading) {
-    return(
+    return (
       <div className="w-[calc(100vw-256px)] min-h-[calc(100vh-112px)] flex justify-center items-center" >
         <Loader />
       </div>
-      ) 
+    )
   }
 
   const handleFilterChange = (key, value) => {
@@ -194,6 +273,17 @@ function AdminClients() {
       setShowDeleteModal(true);
     }
   };
+  const handleAdminButtonClick = () => {
+    if (selectedCustomers.length === 0) {
+      toast.error('Please select at least one customer', {
+        position: 'top-left',
+        autoClose: 3000,
+      });
+    } else {
+
+      setShowAdminModal(true);
+    }
+  };
 
   const handleClearButtonClick = () => {
     fetchData();
@@ -206,13 +296,13 @@ function AdminClients() {
   return (
     <div className="w-[calc(100vw-256px)] min-h-[calc(100vh-112px)] justify-between px-14 py-2 dark:bg-slate-900 dark:text-gray-100">
       <div className="flex w-full justify-between">
-      <div className="w-1/4 mb-3 relative">
+        <div className="w-1/4 mb-3 relative">
           <input
             type="text"
             placeholder="Search..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className={`w-3/4 p-2 outline-none border rounded dark:bg-slate-950 ${searchTerm ? 'border-gray-300': 'border-gray-900'}`}
+            className={`w-3/4 p-2 outline-none border rounded dark:bg-slate-950 ${searchTerm ? 'border-gray-300' : 'border-gray-900'}`}
           />
           {showClearButton && (
             <button
@@ -223,15 +313,17 @@ function AdminClients() {
             </button>
           )}
           {
-          <button
-            onClick={handleSearchButtonClick}
-            className={`absolute top-0 p-2 bg-blue-500 rounded-r-lg ${!searchTerm && 'disabled:opacity-50 cursor-not-allowed'}`}
-            disabled={!searchTerm}
-          >
-            <BiSearchAlt className="cursor-pointer hover:scale-125 hover:text-blue transition-all duration-200 text-2xl" />
-          </button>}
+            <button
+              onClick={handleSearchButtonClick}
+              className={`absolute top-0 p-2 bg-blue-500 rounded-r-lg ${!searchTerm && 'disabled:opacity-50 cursor-not-allowed'}`}
+              disabled={!searchTerm}
+            >
+              <BiSearchAlt className="cursor-pointer hover:scale-125 hover:text-blue transition-all duration-200 text-2xl" />
+            </button>}
         </div>
+
         <div className="w-1/4 flex justify-between mb-3 border-gray-900 " >
+
           <div className="w-full border-gray-900 flex items-center">
             <select
               className="w-full border-gray-900 dark:bg-slate-950"
@@ -240,6 +332,7 @@ function AdminClients() {
             >
               <option value="lastName">Last Name</option>
               <option value="name">Name</option>
+              <option value="UserId">Admin</option>
               <option value="city">City</option>
               <option value="country">Country</option>
               <option value="isActive">Status</option>
@@ -268,14 +361,22 @@ function AdminClients() {
             </button>
 
           </div>
+          
         </div>
-        <button
-          className="w-1/4 p-2 flex items-center justify-end"
-          onClick={handleDeleteButtonClick}
+        <div className="w-1/4 p-2 flex items-center justify-end">
+          <button
+            onClick={handleAdminButtonClick}
 
-        >
-          <BiTrash className="ml-2 cursor-pointer hover:scale-125 hover:text-red transition-all duration-200 text-2xl" />
-        </button>
+          >
+            <MdOutlineAdminPanelSettings className="ml-2 cursor-pointer 3xl hover:scale-125 hover:text-yellow-600 transition-all duration-200 text-2xl" />
+          </button>
+          <button
+            onClick={handleDeleteButtonClick}
+
+          >
+            <BiTrash className="ml-2 cursor-pointer hover:scale-125 hover:text-red transition-all duration-200 text-2xl" />
+          </button>
+        </div>
       </div>
       {error && <div className="error-message">{error}</div>}
       <table className="border-collapse w-full">
@@ -309,7 +410,11 @@ function AdminClients() {
                 />
               </td>
               <td>
-                <a href={`/customer/${customer.id}`}>{customer.name}</a>
+                <div className="flex items-center">
+                  <a href={`/customer/${customer.id}`}>{customer.name}</a>
+                  {customer.UserId === 1 &&
+                    <MdAdminPanelSettings className="text-yellow-600 mr-2" />}
+                </div>
               </td>
               <td>
                 <a href={`/customer/${customer.id}`}>{customer.lastName}</a>
@@ -330,7 +435,7 @@ function AdminClients() {
                 <a href={`/customer/${customer.id}`}>{customer.email}</a>
               </td>
               <td>
-                {customer.isActive ? <FaCheck /> : <FaTimes />}
+                {customer.isActive ? <FaCheck className="text-green-500" /> : <FaTimes className="text-red" />}
               </td>
             </tr>
           ))}
@@ -353,6 +458,15 @@ function AdminClients() {
           onDelete={() => {
             handleDeactivateSelectedCustomer(selectedCustomers);
             setShowDeleteModal(false);
+          }}
+        />
+      )}
+      {showAdminModal && (
+        <AdminConfirmationModal
+          onClose={() => setShowAdminModal(false)}
+          onDelete={() => {
+            handleAdminSelectedCustomer(selectedCustomers);
+            setShowAdminModal(false);
           }}
         />
       )}

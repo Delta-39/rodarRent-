@@ -1,6 +1,6 @@
 const routesHelper = {
-  baseFrontUrl: 'http://127.0.0.1:5173',
-  baseBackUrl: 'http://localhost:3001',
+  baseFrontUrl: 'http://127.0.0.1:5173', //'https://rodarrent.vercel.app',
+  baseBackUrl: 'http://localhost:3001', //'https://rodarrent-main-server.onrender.com',
   landing: '/',
   cars: '/cars',
   login: '/login',

@@ -109,9 +109,9 @@ function Register() {
 
   return (
     <div className="w-full h-full bg-white dark:bg-slate-900 transition duration-300 dark:text-gray-100 flex items-center justify-center">
-      <div className="flex">
-        <div className="sm:drop-shadow-md sm:border bg-white rounded-l-3xl  dark:bg-slate-900">
-          <form className="px-8 pt-0 sm:px-16 sm:pt-10 flex flex-col flex-wrap w-full rounded-xl justify-center">
+      <div className="flex 2xl:flex-row xl:flex-row lg:flex-row md:flex-col md:justify-stretch sm:flex-col xs:flex-col">
+        <div className="sm:drop-shadow-md sm:border bg-white 2xl:rounded-xl xl:rounded-xl lg:rounded-xl md:rounded-none dark:bg-slate-900">
+          <form className="px-8 pt-0 sm:px-16 sm:pt-10 flex flex-col flex-wrap w-full md:w-full justify-center">
             <h1 className="font-poppins p-2 text-3xl">Welcome to RodarRent!</h1>
             <h6 className="font-poppins p-2 text-gray">
               Please enter your info
@@ -477,7 +477,7 @@ function Register() {
             </p>
           </div>
         </div>
-        <div className="hidden sm:block drop-shadow-md rounded-r-3xl flex-col justify-evenly items-center bg-blue">
+        <div className="hidden sm:hidden  lg:flex xl:flex drop-shadow-md rounded-r-3xl flex-col justify-evenly items-center bg-blue">
           <div className="text-4xl text-center font-semibold pb-6 text-white">
             <h1>One step closer to</h1>
             <h1>your dream car!</h1>

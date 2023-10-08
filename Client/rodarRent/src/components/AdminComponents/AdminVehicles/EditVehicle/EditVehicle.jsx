@@ -6,10 +6,9 @@ import { BiErrorCircle } from "react-icons/bi";
 //Components
 import Loader from "../../../Loader/Loader";
 import ImageUpload from "../../ImageUpload/ImageUpload";
-import { toast } from "react-toastify";
 import validate from "./validateEditedVehicle";
 
-const EditVehicle = ({ selectedVehicle }) => {
+const EditVehicle = ({ selectedVehicle, toast, closeModal, setIsEditSubmitted }) => {
     const [vehicle, setVehicle] = useState(null);
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState(null);
@@ -57,7 +56,6 @@ const EditVehicle = ({ selectedVehicle }) => {
             try {
                 const response = await axios.get(`${API_BASE_URL}/vehicles/${id}`);
                 setVehicle(response.data);
-
                 setLoading(false);
             } catch (error) {
                 console.log(error);
@@ -94,7 +92,7 @@ const EditVehicle = ({ selectedVehicle }) => {
         for (const key in editedFields) {
             if (editedFields[key] !== vehicle[key]) {
                 if (key === "pricePerDay") {
-                    editedData[key] = editedFields[key].replace(/\$/g, "").replace(/\s/g, "");
+                    editedData[key] = editedFields[key].replace(/\$/g, "").replace(/\s/g, "").slice(0,-3);
                 } else {
                     editedData[key] = editedFields[key];
                 }
@@ -127,7 +125,10 @@ const EditVehicle = ({ selectedVehicle }) => {
                 })
                 .then(() => {
                     toast.success("Vehicle Updated Correctly");
-
+                    setTimeout(() => {
+                        closeModal(2);
+                        setIsEditSubmitted(true);
+                    }, 3500);
                 })
                 .catch((error) => {
                     toast.error(error);

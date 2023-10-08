@@ -81,11 +81,12 @@ export const InfoAmount = () => {
     <div>
       <div className="text-center text-2xl font-semibold">Profit Record</div>
 
-      <div className="flex w-full justify-around pt-5">
+      <div className="flex w-full justify-around pt-5 dark:text-gray-100">
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Income</InputLabel>
+            <InputLabel className="dark:text-gray-100" id="demo-simple-select-label">Income</InputLabel>
             <Select
+              className="dark:text-gray-100"
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={income}

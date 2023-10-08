@@ -21,6 +21,7 @@ import AdminClients from "./views/Admin/AdminClients";
 import AdminVehicles from "./views/Admin/AdminVehicles";
 import EditPasswordCustomer from "./components/EditCustomer/EditPasswordCustomer";
 import Modal from 'react-modal';
+import AdminRoute from "./helpers/AdminRoute";
 
 function App() {
   const [darkMode, setDarkmode] = useState(true);
@@ -53,11 +54,12 @@ function App() {
         <Route path={routesHelper.allBookings} element={<BookingList />} />
         <Route path={routesHelper.googleAuthAux} element={<GoogleAuthAux />} />
         <Route path={routesHelper.editPasswordCustomer} element={<EditPasswordCustomer/>} />
-        <Route path={routesHelper.admin} element={<Admin />}>
+        {/* <Route path={routesHelper.admin} element={<AdminRoute />}> */}
+        <Route path={routesHelper.admin} element={<AdminRoute><Admin/></AdminRoute>}>
           <Route index element={<Dashboard />} />
           <Route path={routesHelper.admin} element={<Dashboard />} />
           <Route path={routesHelper.adminClients} element={<AdminClients />} />
-          <Route path={routesHelper.adminVehicles} element={<AdminVehicles />}          />
+          <Route path={routesHelper.adminVehicles} element={<AdminVehicles />} />
         </Route>
       </Routes>
     </div>

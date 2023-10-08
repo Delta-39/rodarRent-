@@ -25,7 +25,7 @@ const MostCityRequiered = () => {
 
     const option = {
       title: {
-        text: "Most Requested Cities",
+        text: "Most Requested Locations",
         left: "center",
         top: 20,
       },

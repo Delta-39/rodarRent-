@@ -19,7 +19,7 @@ const DashboardActions = ({  openReviewModal, openEditModal, openEditPasswordMod
         <hr className="border border-gray-300" />
         <ul className="flex flex-col space-y-2 items-center h-3/4 mt-6 justify-evenly">
           <li className="w-full">
-            <button onClick={handleClick} className="w-full py-0.5 px-8 rounded-lg bg-white drop-shadow-lg text-blue-600 border border-gray-300 dark:bg-slate-950 hover:drop-shadow-none block">Subscribe to our newsletter</button>
+            <button onClick={handleClick} className=" w-full text-blue-600 py-1 px-8 rounded-lg bg-white drop-shadow-lg border border-gray-300 dark:bg-slate-950 hover:drop-shadow-none">Subscribe to our newsletter</button>
           </li>
           <li className="w-full">
             <button

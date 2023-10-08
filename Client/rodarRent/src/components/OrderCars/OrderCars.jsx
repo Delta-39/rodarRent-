@@ -3,7 +3,7 @@
 const OrderCards = ({ filterObject, onChangeOrder }) => {
   return (
     <div className="w-full flex mb-4 font-poppins transition duration-200 dark:bg-slate-900 dark:text-gray-100">
-      <div className="w-1/2 flex ml-auto mr-10">
+      <div className="w-full md:w-2/3 lg:w-2/5 flex ml-auto mr-10">
         <p className="font-semibold my-auto text-gray-500 ml-2">Order by</p>
         <select
           className="border rounded p-2 dark:bg-slate-950 mb-2 ml-auto mr-4 w-3/5 h-10"

@@ -1,13 +1,13 @@
 import React from 'react';
 import { getLocalStorage } from '../../helpers/storage';
 import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+//import { ToastContainer, toast } from 'react-toastify';
+//import 'react-toastify/dist/ReactToastify.css';
 import { API_BASE_URL } from '../../helpers/routes';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const ReviewForm = () => {
+const ReviewForm = ({toastAlert}) => {
   const navigate = useNavigate();
   const customer = getLocalStorage('loginData');
   //console.log(customer.id);
@@ -33,7 +33,7 @@ const ReviewForm = () => {
         .post(`${API_BASE_URL}/reviews`, reviewData)
         .then((response) => {
           console.log(response);
-          toast.success(`Sent review!, thanks ${customer.name}`);
+          toastAlert(`Sent review!, thanks ${customer.name}`, "success");
           setTimeout(() => {
             navigate('/aboutUs');
           }, 4000);
@@ -47,10 +47,10 @@ const ReviewForm = () => {
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
         // Display the error message from the backend
-        toast.error(error.response.data.error);
+        toastAlert(error.response.data.error, "error");
       } else {
         // Display a generic error message
-        toast.error('An error occurred while submitting your review.');
+        toastAlert('An error occurred while submitting your review.', "error");
       }
       console.log(error);
     }
@@ -109,18 +109,6 @@ const ReviewForm = () => {
           </div>
         </form>
       </div>
-      <ToastContainer
-        position="top-left"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </div>
   );
 };

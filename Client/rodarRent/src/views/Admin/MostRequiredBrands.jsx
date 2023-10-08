@@ -1,30 +1,32 @@
-import { PieChart } from "@mui/x-charts/PieChart";
-// import { useQuery } from "react-query";
-// import { API_BASE_URL } from "../../helpers/routes";
-
-
-const data = [
-  { label: "Mercedes Benz", value: 15 },
-  { label: "Volkswagen", value: 13 },
-  { label: "Chevrolet", value: 8 },
-  { label: "Ford", value: 8 },
-  { label: "Audi", value: 7 },
-  { label: "Nissan", value: 4 },
-];
+import { PieChart } from '@mui/x-charts/PieChart';
+import { useEffect, useState } from 'react'; // Import useState
+import { API_BASE_URL } from '../../helpers/routes';
+import axios from 'axios';
 
 export default function MostRequiredBrands() {
+  const [data, setData] = useState([]); // Initialize state to store data
 
-//   const brandRequired = useQuery(["mostRequiredBrands"], () =>
-//   fetch("http://localhost:3001/booking/mostRequiredBrands").then((res) => res.json())
-// );
+  useEffect(() => {
+    const brandRequired = async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/booking/mostRequiredBrands`,
+        );
+        const infoBrand = response.data;
 
-// console.log(brandRequired.data)
+        // Map the data and set it in state
+        const mappedData = infoBrand.map((e) => ({
+          label: e.model,
+          value: e.count,
+        }));
+        setData(mappedData); // Update the state with the mapped data
+      } catch (error) {
+        console.error('Error fetching data', error);
+      }
+    };
+    brandRequired();
+  }, []);
 
-// const data = brandRequired?.data.map((e)=>({
-//   label:e.model, 
-//   value:e.count
-// }))
-  
   return (
     <div className="text-center">
       <h2 className="text-2xl font-bold mt-4">Most Required Brands</h2>

@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Loader from '../Loader/Loader';
-import validateEdit from './validateEdit';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Loader from "../Loader/Loader";
+import validateEdit from "./validateEdit";
 
-import { getCustomerDetailsUrl, updateCustomerInfoUrl, updatePasswordUrl } from '../../helpers/routes';
+import {
+  getCustomerDetailsUrl,
+  updateCustomerInfoUrl,
+  updatePasswordUrl,
+} from "../../helpers/routes";
 // Toastify
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EditCustomer = () => {
   const { id } = useParams();
@@ -14,34 +18,34 @@ const EditCustomer = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [editedFields, setEditedFields] = useState({
-    id: '',
-    name: '',
-    lastName: '',
-    personalId: '',
-    birthDate: '',
-    address: '',
-    city: '',
-    country: '',
-    zipCode: '',
-    phoneNumber: '',
-    email: '',
+    id: "",
+    name: "",
+    lastName: "",
+    personalId: "",
+    birthDate: "",
+    address: "",
+    city: "",
+    country: "",
+    zipCode: "",
+    phoneNumber: "",
+    email: "",
   });
 
   const [errors, setErrors] = useState({
-    id: '',
-    name: '',
-    lastName: '',
-    personalId: '',
-    birthDate: '',
-    address: '',
-    city: '',
-    country: '',
-    zipCode: '',
-    phoneNumber: '',
-    email: '',
+    id: "",
+    name: "",
+    lastName: "",
+    personalId: "",
+    birthDate: "",
+    address: "",
+    city: "",
+    country: "",
+    zipCode: "",
+    phoneNumber: "",
+    email: "",
   });
 
-  const [isSaving, setIsSaving] = useState(false); 
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const fetchCustomerDetails = async () => {
@@ -51,9 +55,8 @@ const EditCustomer = () => {
         setCustomer(data);
         setErrors(validateEdit(data));
         setIsLoading(false);
-        
       } catch (error) {
-        console.error('Error', error);
+        console.error("Error", error);
         setIsLoading(false);
       }
     };
@@ -66,7 +69,7 @@ const EditCustomer = () => {
       setEditedFields({
         ...customer,
       });
-      setErrors(validateEdit(editedFields));
+      setErrors(validateEdit({...customer}));
     }
   }, [customer]);
 
@@ -81,34 +84,33 @@ const EditCustomer = () => {
       return;
     }
 
-    setIsSaving(true); 
+    setIsSaving(true);
 
     try {
       const response = await fetch(updateCustomerInfoUrl(id), {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(editedFields),
       });
 
       if (response.status === 200) {
-        toast.success('Customer information updated successfully', {
+        toast.success("Customer information updated successfully", {
           autoClose: 3000,
         });
 
-       
         setTimeout(() => {
           window.location.reload();
-          setIsSaving(false); 
+          setIsSaving(false);
         }, 3000);
       } else {
         setIsSaving(false);
       }
     } catch (error) {
-      console.error('Error', error);
-      toast.error('Error inesperado');
-      setIsSaving(false); 
+      console.error("Error", error);
+      toast.error("Error inesperado");
+      setIsSaving(false);
     }
   };
 
@@ -131,26 +133,26 @@ const EditCustomer = () => {
         <form className=" w-120 px-16 py-5 flex flex-col flex-wrap  rounded-xl justify-center">
           <h1 className="font-poppins p-2 text-3xl">Edit your info</h1>
           <hr className="ml-8 mr-8 p-2 text-gray" />
-          <div className='flex'>
-            <div className='w-2/4'>
+          <div className="flex">
+            <div className="w-2/4">
               <label
-                className='font-poppins text-sm flex m-1 mb-0 justify-start'
-                htmlFor='name'
+                className="font-poppins text-sm flex m-1 mb-0 justify-start"
+                htmlFor="name"
               >
                 Name
               </label>
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <input
-                  className='w-10/12 font-poppins text-sm flex justify-start items-center p-1 m-1 text-black rounded-lg drop-shadow-md border border-gray '
-                  type='text'
-                  name='name'
+                  className="w-10/12 font-poppins text-sm flex justify-start items-center p-1 m-1 text-black rounded-lg drop-shadow-md border border-gray "
+                  type="text"
+                  name="name"
                   value={editedFields.name}
                   onChange={handleFieldChange}
                 />
                 <span
                   className={
                     errors.name
-                      ? 'font-poppins text-ls flex m-1 justify-start text-red'
+                      ? "font-poppins text-ls flex m-1 justify-start text-red"
                       : null
                   }
                 >
@@ -158,25 +160,25 @@ const EditCustomer = () => {
                 </span>
               </div>
             </div>
-            <div className='w-2/4'>
+            <div className="w-2/4">
               <label
-                className='font-poppins text-sm flex m-1 mb-0 justify-start'
-                htmlFor='lastName'
+                className="font-poppins text-sm flex m-1 mb-0 justify-start"
+                htmlFor="lastName"
               >
                 Last Name
               </label>
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <input
-                  className='w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray'
-                  type='text'
-                  name='lastName'
+                  className="w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray"
+                  type="text"
+                  name="lastName"
                   value={editedFields.lastName}
                   onChange={handleFieldChange}
                 />
                 <span
                   className={
                     errors.lastName
-                      ? 'font-poppins text-ls flex m-1 justify-start text-red'
+                      ? "font-poppins text-ls flex m-1 justify-start text-red"
                       : null
                   }
                 >
@@ -185,26 +187,26 @@ const EditCustomer = () => {
               </div>
             </div>
           </div>
-          <div className='flex'>
-            <div className='w-2/4'>
+          <div className="flex">
+            <div className="w-2/4">
               <label
-                className='font-poppins text-sm flex m-1 mb-0 justify-start'
-                htmlFor='email'
+                className="font-poppins text-sm flex m-1 mb-0 justify-start"
+                htmlFor="email"
               >
                 E-mail
               </label>
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <input
-                  className='w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray'
-                  type='text'
-                  name='email'
+                  className="w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray"
+                  type="text"
+                  name="email"
                   value={editedFields.email}
                   onChange={handleFieldChange}
                 />
                 <span
                   className={
                     errors.email
-                      ? 'font-poppins text-ls flex m-1 justify-start text-red'
+                      ? "font-poppins text-ls flex m-1 justify-start text-red"
                       : null
                   }
                 >
@@ -214,32 +216,32 @@ const EditCustomer = () => {
               <span
                 className={
                   errors.emailMsj
-                    ? 'font-poppins text-ls flex m-1 justify-start text-red'
+                    ? "font-poppins text-ls flex m-1 justify-start text-red"
                     : null
                 }
               >
                 {errors.emailMsj}
               </span>
             </div>
-            <div className='w-2/4'>
+            <div className="w-2/4">
               <label
-                className='font-poppins text-sm flex m-1 mb-0 justify-start'
-                htmlFor='phoneNumber'
+                className="font-poppins text-sm flex m-1 mb-0 justify-start"
+                htmlFor="phoneNumber"
               >
                 Phone Number
               </label>
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <input
-                  className='w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray'
-                  type='text'
-                  name='phoneNumber'
+                  className="w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray"
+                  type="text"
+                  name="phoneNumber"
                   value={editedFields.phoneNumber}
                   onChange={handleFieldChange}
                 />
                 <span
                   className={
                     errors.phoneNumber
-                      ? 'font-poppins text-ls flex m-1 justify-start text-red'
+                      ? "font-poppins text-ls flex m-1 justify-start text-red"
                       : null
                   }
                 >
@@ -248,26 +250,26 @@ const EditCustomer = () => {
               </div>
             </div>
           </div>
-          <div className='flex'>
-            <div className='w-2/4'>
+          <div className="flex">
+            <div className="w-2/4">
               <label
-                className='font-poppins text-sm flex m-1 mb-0 justify-start'
-                htmlFor='personalId'
+                className="font-poppins text-sm flex m-1 mb-0 justify-start"
+                htmlFor="personalId"
               >
                 PersonalID
               </label>
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <input
-                  className='w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray'
-                  type='text'
-                  name='personalId'
+                  className="w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray"
+                  type="text"
+                  name="personalId"
                   value={editedFields.personalId}
                   onChange={handleFieldChange}
                 />
                 <span
                   className={
                     errors.personalId
-                      ? 'font-poppins text-ls flex m-1 justify-start text-red'
+                      ? "font-poppins text-ls flex m-1 justify-start text-red"
                       : null
                   }
                 >
@@ -275,25 +277,25 @@ const EditCustomer = () => {
                 </span>
               </div>
             </div>
-            <div className='w-2/4'>
+            <div className="w-2/4">
               <label
-                className='font-poppins text-sm flex m-1 mb-0 justify-start'
-                htmlFor='birthDate'
+                className="font-poppins text-sm flex m-1 mb-0 justify-start"
+                htmlFor="birthDate"
               >
                 Birth Date
               </label>
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <input
-                  className='w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray'
-                  type='date'
-                  name='birthDate'
+                  className="w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray"
+                  type="date"
+                  name="birthDate"
                   value={editedFields.birthDate}
                   onChange={handleFieldChange}
                 />
                 <span
                   className={
                     errors.birthDate
-                      ? 'font-poppins text-ls flex m-1 justify-start text-red'
+                      ? "font-poppins text-ls flex m-1 justify-start text-red"
                       : null
                   }
                 >
@@ -302,26 +304,26 @@ const EditCustomer = () => {
               </div>
             </div>
           </div>
-          <div className='flex'>
-            <div className='w-2/4'>
+          <div className="flex">
+            <div className="w-2/4">
               <label
-                className='font-poppins text-sm flex m-1 mb-0 justify-start'
-                htmlFor='country'
+                className="font-poppins text-sm flex m-1 mb-0 justify-start"
+                htmlFor="country"
               >
                 Country
               </label>
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <input
-                  className='w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray'
-                  type='text'
-                  name='country'
+                  className="w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray"
+                  type="text"
+                  name="country"
                   value={editedFields.country}
                   onChange={handleFieldChange}
                 />
                 <span
                   className={
                     errors.country
-                      ? 'font-poppins text-ls flex m-1 justify-start text-red'
+                      ? "font-poppins text-ls flex m-1 justify-start text-red"
                       : null
                   }
                 >
@@ -329,25 +331,25 @@ const EditCustomer = () => {
                 </span>
               </div>
             </div>
-            <div className='w-2/4'>
+            <div className="w-2/4">
               <label
-                className='font-poppins text-sm flex m-1 mb-0 justify-start'
-                htmlFor='city'
+                className="font-poppins text-sm flex m-1 mb-0 justify-start"
+                htmlFor="city"
               >
                 City
               </label>
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <input
-                  className='w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray'
-                  type='text'
-                  name='city'
+                  className="w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray"
+                  type="text"
+                  name="city"
                   value={editedFields.city}
                   onChange={handleFieldChange}
                 />
                 <span
                   className={
                     errors.city
-                      ? 'font-poppins text-ls flex m-1 justify-start text-red'
+                      ? "font-poppins text-ls flex m-1 justify-start text-red"
                       : null
                   }
                 >
@@ -356,26 +358,26 @@ const EditCustomer = () => {
               </div>
             </div>
           </div>
-          <div className='flex'>
-            <div className='w-2/4'>
+          <div className="flex">
+            <div className="w-2/4">
               <label
-                className='font-poppins text-sm flex m-1 mb-0 justify-start'
-                htmlFor='address'
+                className="font-poppins text-sm flex m-1 mb-0 justify-start"
+                htmlFor="address"
               >
                 Address
               </label>
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <input
-                  className='w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray'
-                  type='text'
-                  name='address'
+                  className="w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray"
+                  type="text"
+                  name="address"
                   value={editedFields.address}
                   onChange={handleFieldChange}
                 />
                 <span
                   className={
                     errors.address
-                      ? 'font-poppins text-ls flex m-1 justify-start text-red'
+                      ? "font-poppins text-ls flex m-1 justify-start text-red"
                       : null
                   }
                 >
@@ -383,25 +385,25 @@ const EditCustomer = () => {
                 </span>
               </div>
             </div>
-            <div className='w-2/4'>
+            <div className="w-2/4">
               <label
-                className='font-poppins text-sm flex m-1 mb-0 justify-start'
-                htmlFor='zipCode'
+                className="font-poppins text-sm flex m-1 mb-0 justify-start"
+                htmlFor="zipCode"
               >
                 Zip Code
               </label>
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <input
-                  className='w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray'
-                  type='text'
-                  name='zipCode'
+                  className="w-10/12 font-poppins text-black text-sm flex justify-start items-center p-1 m-1 rounded-lg drop-shadow-md border border-gray"
+                  type="text"
+                  name="zipCode"
                   value={editedFields.zipCode}
                   onChange={handleFieldChange}
                 />
                 <span
                   className={
                     errors.zipCode
-                      ? 'font-poppins text-ls flex m-1 justify-start text-red'
+                      ? "font-poppins text-ls flex m-1 justify-start text-red"
                       : null
                   }
                 >

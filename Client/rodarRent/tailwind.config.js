@@ -7,6 +7,20 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        'slide-horizontal': 'slide-horizontal 25s infinite linear',
+      },
+      keyframes: {
+        'slide-horizontal': {
+          '0%': {
+            transform: 'translateX(0%)',
+          },
+          '100%': {
+            transform: 'translateX(100%)',
+          },
+        },
+      },
+
       screens:{
         "xs":"350px"
       },
@@ -54,5 +68,7 @@ export default {
     },
 
   },
+
   plugins: [],
+  
 }
